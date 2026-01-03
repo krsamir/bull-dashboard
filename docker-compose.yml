@@ -1,0 +1,9 @@
+services:
+  node-service:
+    container_name: bull-dashboard
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    restart: unless-stopped
