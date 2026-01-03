@@ -4,7 +4,8 @@
   "description": "Example of how to install bull-board on existing Express server",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "dev": "cross-env NODE_ENV=local node index.js",
+    "start": "cross-env NODE_ENV=prod node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "felixmosh",
@@ -13,6 +14,8 @@
     "@bull-board/api": "^6.13.1",
     "@bull-board/express": "^6.11.0",
     "bullmq": "^5.56.4",
+    "cross-env": "^10.1.0",
+    "dotenv": "^17.2.3",
     "express": "^5.2.0"
   }
 }

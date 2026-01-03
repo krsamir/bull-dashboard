@@ -3,13 +3,19 @@ const { BullMQAdapter } = require("@bull-board/api/bullMQAdapter");
 const { ExpressAdapter } = require("@bull-board/express");
 const { Queue: QueueMQ, Worker } = require("bullmq");
 const express = require("express");
+const { config } = require("dotenv");
+
+config({ path: `${process.env.NODE_ENV}.env` });
+
+const { REDIS_PORT, REDIS_HOST, MESSAGE_QUEUE_NAME, REDIS_PASSWORD, PORT } =
+  process.env;
 
 const sleep = (t) => new Promise((resolve) => setTimeout(resolve, t * 1000));
 
 const redisOptions = {
-  port: 6379,
-  host: "host.docker.internal",
-  password: "",
+  port: REDIS_PORT,
+  host: REDIS_HOST,
+  password: REDIS_PASSWORD,
   tls: false,
 };
 
@@ -34,7 +40,7 @@ function setupBullMQProcessor(queueName) {
 }
 
 const run = async () => {
-  const exampleBullMq = createQueueMQ("product");
+  const exampleBullMq = createQueueMQ(MESSAGE_QUEUE_NAME);
 
   await setupBullMQProcessor(exampleBullMq.name);
 
@@ -64,9 +70,9 @@ const run = async () => {
   //   });
   // });
 
-  app.listen(4000, () => {
-    console.log("Running on 4000...");
-    console.log("For the UI, open http://localhost:4000/ui");
+  app.listen(PORT, () => {
+    console.log(`Running on ${PORT}...`);
+    console.log(`For the UI, open http://localhost:${PORT}/ui`);
     console.log("Make sure Redis is running on port 6379 by default");
   });
 };
