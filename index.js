@@ -1,15 +1,15 @@
-const { createBullBoard } = require('@bull-board/api');
-const { BullMQAdapter } = require('@bull-board/api/bullMQAdapter');
-const { ExpressAdapter } = require('@bull-board/express');
-const { Queue: QueueMQ, Worker } = require('bullmq');
-const express = require('express');
+const { createBullBoard } = require("@bull-board/api");
+const { BullMQAdapter } = require("@bull-board/api/bullMQAdapter");
+const { ExpressAdapter } = require("@bull-board/express");
+const { Queue: QueueMQ, Worker } = require("bullmq");
+const express = require("express");
 
 const sleep = (t) => new Promise((resolve) => setTimeout(resolve, t * 1000));
 
 const redisOptions = {
   port: 6379,
-  host: 'localhost',
-  password: '',
+  host: "host.docker.internal",
+  password: "",
   tls: false,
 };
 
@@ -34,21 +34,21 @@ function setupBullMQProcessor(queueName) {
 }
 
 const run = async () => {
-  const exampleBullMq = createQueueMQ('product');
+  const exampleBullMq = createQueueMQ("product");
 
   await setupBullMQProcessor(exampleBullMq.name);
 
   const app = express();
 
   const serverAdapter = new ExpressAdapter();
-  serverAdapter.setBasePath('/ui');
+  serverAdapter.setBasePath("/ui");
 
   createBullBoard({
     queues: [new BullMQAdapter(exampleBullMq)],
     serverAdapter,
   });
 
-  app.use('/ui', serverAdapter.getRouter());
+  app.use("/ui", serverAdapter.getRouter());
 
   // app.use('/add', (req, res) => {
   //   const opts = req.query.opts || {};
@@ -65,9 +65,9 @@ const run = async () => {
   // });
 
   app.listen(4000, () => {
-    console.log('Running on 4000...');
-    console.log('For the UI, open http://localhost:4000/ui');
-    console.log('Make sure Redis is running on port 6379 by default');
+    console.log("Running on 4000...");
+    console.log("For the UI, open http://localhost:4000/ui");
+    console.log("Make sure Redis is running on port 6379 by default");
   });
 };
 
